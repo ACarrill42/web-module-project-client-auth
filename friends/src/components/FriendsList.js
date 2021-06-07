@@ -3,7 +3,8 @@ import {axiosWithAuth} from '../utils/axiosWithAuth';
 
 function FriendsList() {
   const [state, setState] = useState({
-    friends: []
+    friends: [],
+    id: ''
   });
 
   const getFriends = () => {
@@ -16,16 +17,40 @@ function FriendsList() {
     .catch(err => {
       console.log(err)
     })
+  } 
+
+  const friendsId = () => {
+    axiosWithAuth().get('/friends/:id')
+      .then(res => {
+        setState({
+        id: res.data.data            
+        })
+      })
+      .catch(err => {
+        console.log(err)
+      })
+  };
+
+  const newFriend = () => {
+    axiosWithAuth.post('/friends', state.friends)
+      .then(res => {
+        setState({...state, friends: res.data.data})
+      })
+      .catch(err => {
+        console.log(err)
+      })
   }
 
   useEffect(() => {
-    getFriends()    
+    getFriends()
+    friendsId()  
+    newFriend()  
     }
   )
 //place holder, for now
   return (
     <div> 
-      {state.setfriends()} 
+      {setState()} 
     </div>
   )
 }
